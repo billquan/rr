@@ -1,7 +1,7 @@
 import axios from 'axios';
 import authHeader from './auth-header';
 
-const API_URL = 'https://signallingserver.us-east-2.elasticbeanstalk.com/api/business/';
+const API_URL = 'http://localhost:5000/api/business/';
 
 class UserService {
 

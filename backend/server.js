@@ -2,15 +2,17 @@ const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose"); // Mongoose helps connect to MongoDB Database
 const bodyParser = require("body-parser");
-const path = require('path');
+
 
 require("dotenv").config();
 
 const app = express();
+var corsOptions = {
+  origin: "http://localhost:8081"
+};
+const port = process.env.PORT || 5000; // Port the server is on
 
-const port = process.env.PORT || 8082; // Port the server is on
-
-app.use(cors()); // cors middleware
+app.use(cors(corsOptions)); // cors middleware
 app.use(express.json()); // Parses JSON from server
 // parse requests of content-type - application/json
 app.use(bodyParser.json());
@@ -39,7 +41,9 @@ const connection = mongoose.connection;
 connection.once("open", () => {
   console.log("MongoDB database connection established successfully");
 });
-
+app.get("/", (req, res) => {
+  res.json({ message: "Welcome to the application." });
+});
 
 // Import the files
 const coursesRouter = require("./routes/courses");
@@ -59,10 +63,7 @@ app.use("/api/enroll", enrolmentRouter);
 app.listen(port, () => {
   console.log(`Server is running on port: ${port}`);
 });
-app.use(express.static(path.join(__dirname,'./build')));
-app.get('*',(req,res)=>{
-  res.sendFile(path.join(__dirname,'./build/index.html'))
-})
+
 
 
 function initial() {
